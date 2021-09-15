@@ -1,10 +1,7 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link to="/verification">Verification</router-link>
-    <router-link to="/login">login</router-link>
-    <router-link to="/success">success</router-link>
+  <div id="nav" class="container d-flex justify-content-center g-5">
+    <router-link to="/" class="d-block mx-2">Register</router-link>
+    <router-link to="/Login" class="d-block mx-2">Login</router-link>
   </div>
   <router-view/>
 </template>

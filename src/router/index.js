@@ -4,6 +4,7 @@ import Registration  from '../views/Registration.vue'
 import Verification  from '../views/Verification.vue'
 import Login  from '../views/Login.vue'
 import Success  from '../views/Success.vue'
+import store from '../store'
 
 const routes = [
   {
@@ -14,17 +15,32 @@ const routes = [
   {
     path: '/verification',
     name: "Verification Page",
-    component: Verification
+    component: Verification,
+    beforeEnter: (to, from, next) =>  {
+      if(store.state.access_token == ''){
+        next('/');
+      } else {
+        next();
+      }
+    }
+
   },
   {
     path: '/login',
-    name: "Login Page",
+    name: "Login",
     component: Login
   },
   {
     path: '/success',
     name: "Success page",
-    component: Success
+    component: Success,
+    beforeEnter: (to, from, next) =>  {
+      if(store.state.authenticated == false){
+        next({ name: 'Login' });
+      } else {
+        next();
+      }
+    }
   },
   {
     path: "/contact",

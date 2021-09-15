@@ -26,7 +26,7 @@
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
               <input type="password" class="form-control" id="password" v-model="password" required>
-              <div v-if="error.password" class="text-danger">Password must be at least six characters, at least one letter and one number</div>
+              <div v-if="error.password" class="text-danger">Password must be at least 8 characters, at least one letter and one number</div>
             </div>
 
             <!-- Confirm Password -->
@@ -34,6 +34,10 @@
               <label for="confirmPassword" class="form-label">Confirm Password</label>
               <input type="password" class="form-control" id="confirmPassword" v-model="confirmPassword" required>
               <div v-if="error.confirmPassword" class="text-danger">This must be the same with the password</div>
+            </div>
+
+            <div  class="mb-3">
+              <div v-if="errorRequest" class="text-danger">The email  is already registered</div>
             </div>
 
             <button type="submit" class="btn btn-primary w-100">Register</button>
@@ -46,6 +50,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data: function(){
     return {
@@ -59,6 +65,7 @@ export default {
         password: false,
         confirmPassword: false,
       },
+      errorRequest: false
     }
   },
   methods: {
@@ -67,7 +74,7 @@ export default {
 
       var fullnameregexp = new RegExp(/^[a-z]+\s[a-z ]+$/i);
       var emailregexp = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-      var passwordregexp = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/);
+      var passwordregexp = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/);
       
       //Full Name validation
       if(this.fullName === '' || this.fullName === null || this.fullName.length <= 4 || fullnameregexp.test(this.fullName) === false){
@@ -97,9 +104,31 @@ export default {
         }
       }
 
-      if(this.error.fullName !== false && this.error.email !== false && this.error.password !== false && this.error.confirmPassword !== false){
+      if(this.error.fullName === false && this.error.email === false && this.error.password === false && this.error.confirmPassword === false && this.password === this.confirmPassword){
 
-        console.log("No error now i will fire some code");
+          axios.post('https://api.baseplate.appetiserdev.tech/api/v1/auth/register', {
+            email: this.email,
+            full_name: this.fullName,
+            password: this.password,
+            password_confirmation: this.confirmPassword
+          }, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then( (response) => {
+            
+            if(response.data.success ===  true){
+              this.$store.commit("setUseremail", this.email);
+              this.$store.commit("setAccessToken", response.data.data.access_token);
+              this.$router.push('/verification');
+            }
+
+          })
+          .catch( (err) => {
+            this.errorRequest =  true;
+            console.log(err);
+          });
 
       }
 
