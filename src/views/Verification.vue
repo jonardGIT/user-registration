@@ -57,7 +57,6 @@ export default {
 
         if(response.data.success ===  true){
           this.error = false;
-          this.$store.commit("setAuthentication", true);
           this.$router.push('/login').catch(() => {});
         }
 
