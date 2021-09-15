@@ -104,6 +104,8 @@ export default {
         }
       }
 
+
+      //Validate Form if error exists
       if(this.error.fullName === false && this.error.email === false && this.error.password === false && this.error.confirmPassword === false && this.password === this.confirmPassword){
 
           axios.post('https://api.baseplate.appetiserdev.tech/api/v1/auth/register', {
@@ -118,6 +120,7 @@ export default {
           })
           .then( (response) => {
             
+            //Store the access token and { email is optional } for the verification page to access
             if(response.data.success ===  true){
               this.$store.commit("setUseremail", this.email);
               this.$store.commit("setAccessToken", response.data.data.access_token);

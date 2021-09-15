@@ -58,6 +58,7 @@ export default {
       })
       .then( (response) => {
         
+        //Set Authentication to true  if the request is succesful
         if(response.data.success ===  true){
           this.error = false;
           this.$store.commit("setAuthentication", true);

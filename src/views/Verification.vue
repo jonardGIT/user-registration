@@ -43,7 +43,7 @@ export default {
   methods: {
 
     verifyUser: function(){
-
+      //Send request to verify using the received token from registration
       axios.post('https://api.baseplate.appetiserdev.tech/api/v1/auth/verification/verify', {
         token: this.verificationCode,
         via: "email",
@@ -55,6 +55,7 @@ export default {
       })
       .then( (response) => {
 
+        //Redirect to login if done
         if(response.data.success ===  true){
           this.error = false;
           this.$router.push('/login').catch(() => {});

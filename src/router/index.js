@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Contact  from '../views/Contact.vue'
 import Registration  from '../views/Registration.vue'
 import Verification  from '../views/Verification.vue'
 import Login  from '../views/Login.vue'
@@ -16,6 +15,7 @@ const routes = [
     path: '/verification',
     name: "Verification Page",
     component: Verification,
+    //Prevent Access if the token is not present generated when a user registers
     beforeEnter: (to, from, next) =>  {
       if(store.state.access_token == ''){
         next('/');
@@ -34,6 +34,7 @@ const routes = [
     path: '/success',
     name: "Success page",
     component: Success,
+    //Prevent Access if the  user is not  authenticated
     beforeEnter: (to, from, next) =>  {
       if(store.state.authenticated == false){
         next({ name: 'Login' });
@@ -41,19 +42,6 @@ const routes = [
         next();
       }
     }
-  },
-  {
-    path: "/contact",
-    name: "Contact",
-    component:  Contact
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   }
 ]
 
